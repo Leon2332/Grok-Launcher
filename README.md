@@ -54,7 +54,7 @@ Grok is a fantastic CLI tool, but many Linux users (especially less technical on
 
 ## Future ideas
 
-Right-click folder → "Open with Grok" (context menu integration) is planned for later. Target desktop environments: GNOME, KDE Plasma, Cinnamon, and COSMIC.
+Right-click folder → "Open with Grok" (context menu integration - it will just `cd` to the directory) is planned for later. Target desktop environments: GNOME, KDE Plasma, Cinnamon, and COSMIC.
 
 ## License / Disclaimer
 
@@ -63,5 +63,7 @@ Source code is licensed under the [MIT License](LICENSE.md).
 This is an unofficial community launcher created for convenience. Grok and Grok Build are trademarks of xAI. The actual Grok CLI is installed from the official xAI servers.
 
 ---
+
+This is my first actual application (since I'm LAMP stack). I don't feel confident enough to publish this to Flathub, so feel free to fork, clone or reiterate and publish if you think that it would be useful to someone.
 
 Enjoy.
