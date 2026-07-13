@@ -1,0 +1,29 @@
+app-id: org.grokbuild.Launcher
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: grok-launcher
+
+finish-args:
+  - --talk-name=org.freedesktop.Flatpak
+  - --socket=session-bus
+  - --talk-name=org.freedesktop.Notifications
+  - --socket=wayland
+  - --socket=x11
+  - --share=ipc
+  - --device=dri
+
+modules:
+  - name: grok-launcher
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 grok-launcher.sh /app/bin/grok-launcher
+      - install -Dm644 org.grokbuild.Launcher.desktop /app/share/applications/org.grokbuild.Launcher.desktop
+      - install -Dm644 org.grokbuild.Launcher.png /app/share/icons/hicolor/512x512/apps/org.grokbuild.Launcher.png
+    sources:
+      - type: file
+        path: grok-launcher.sh
+      - type: file
+        path: org.grokbuild.Launcher.desktop
+      - type: file
+        path: org.grokbuild.Launcher.png
