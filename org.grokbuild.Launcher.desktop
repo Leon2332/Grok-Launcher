@@ -1,0 +1,18 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Grok
+GenericName=AI Coding Agent
+Comment=Launch Grok - xAI's powerful terminal coding agent
+Exec=grok-launcher
+Icon=org.grokbuild.Launcher
+Terminal=false
+Categories=Development;Utility;
+Keywords=AI;Coding;Agent;Grok;xAI;Terminal;TUI;
+StartupNotify=false
+Actions=NewSession;
+DBusActivatable=false
+
+[Desktop Action NewSession]
+Name=Start New Grok Session
+Exec=grok-launcher
