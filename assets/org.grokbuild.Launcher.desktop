@@ -4,15 +4,21 @@ Type=Application
 Name=Grok
 GenericName=AI Coding Agent
 Comment=Launch Grok - xAI's powerful terminal coding agent
-Exec=grok-launcher
+# %u: optional folder from "Open With" / file-manager integration (file:// or path)
+Exec=grok-launcher %u
 Icon=org.grokbuild.Launcher
 Terminal=false
 Categories=Development;Utility;
 Keywords=AI;Coding;Agent;Grok;xAI;Terminal;TUI;
+MimeType=inode/directory;
 StartupNotify=false
-Actions=NewSession;
+Actions=NewSession;InstallContextMenu;
 DBusActivatable=false
 
 [Desktop Action NewSession]
 Name=Start New Grok Session
 Exec=grok-launcher
+
+[Desktop Action InstallContextMenu]
+Name=Install File Manager Integration
+Exec=grok-launcher --install-context-menu
