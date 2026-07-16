@@ -64,6 +64,4 @@ This is an unofficial community launcher created for convenience. Grok and Grok 
 
 ---
 
-This is my first actual application (since I'm LAMP stack). I don't feel confident enough to publish this to Flathub, so feel free to fork, clone or reiterate and publish if you think that it would be useful to someone.
-
 Enjoy.
