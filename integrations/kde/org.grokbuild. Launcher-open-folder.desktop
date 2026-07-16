@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+# ServiceTypes required for Plasma 5 / older KF locations; harmless on Plasma 6.
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=inode/directory;
+Actions=OpenWithGrok;
+X-KDE-Priority=TopLevel
+X-KDE-MinNumberOfUrls=1
+X-KDE-MaxNumberOfUrls=1
+
+[Desktop Action OpenWithGrok]
+Name=Open with Grok
+Name[en_GB]=Open with Grok
+Icon=org.grokbuild.Launcher
+Exec=flatpak run org.grokbuild.Launcher %f
