@@ -19,7 +19,7 @@ This makes Grok easily accessible to normal users who prefer clicking an icon ov
 ## Build & Install
 
 ```bash
-cd org.grokbuild.Launcher/
+cd Grok-Launcher-main/   # or your checkout directory
 
 # Build and install for your user
 flatpak-builder --user --install --force-clean build-dir org.grokbuild.Launcher.yml
@@ -28,22 +28,95 @@ flatpak-builder --user --install --force-clean build-dir org.grokbuild.Launcher.
 # flatpak-builder --system --install --force-clean build-dir org.grokbuild.Launcher.yml
 ```
 
-After installation, you should see **Grok Build** in your application menu / launcher, with the official Grok icon.
+After installation, you should see **Grok** in your application menu / launcher, with the official Grok icon.
 
 You can also run it from command line:
 ```bash
 flatpak run org.grokbuild.Launcher
+
+# Start in a specific project directory
+flatpak run org.grokbuild.Launcher /path/to/project
 ```
+
+## Open with Grok (file manager context menu)
+
+Right-click a **folder** and choose **Open with Grok** to launch Grok already `cd`'d into that directory.
+
+<p align="center">
+  <img src="docs/Screenshot%20From%202026-07-16%2022-03-16.png" alt="Right-click a folder and choose Open with Grok" width="720" />
+  <br />
+  <em>Right-click a project folder → Open with Grok</em>
+</p>
+
+<p align="center">
+  <img src="docs/Screenshot%20From%202026-07-16%2022-04-09.png" alt="Grok Build opened in the selected project directory" width="720" />
+  <br />
+  <em>Grok opens in a terminal already set to that directory</em>
+</p>
+
+### Install the context menu entries
+
+After installing the Flatpak:
+
+```bash
+flatpak run org.grokbuild.Launcher --install-context-menu
+```
+
+Or from the app menu: right-click the **Grok** launcher → **Install File Manager Integration** (on desktops that show desktop actions).
+
+Check / remove:
+
+```bash
+flatpak run org.grokbuild.Launcher --status-context-menu
+flatpak run org.grokbuild.Launcher --uninstall-context-menu
+```
+
+### Desktop environment support
+
+<table>
+  <tr>
+    <th>Environment</th>
+    <th>File manager</th>
+    <th>How it appears</th>
+  </tr>
+  <tr>
+    <td><strong>GNOME</strong></td>
+    <td>Nautilus (Files)</td>
+    <td>Top-level <strong>Open with Grok</strong> (via <code>python3-nautilus</code> extension)</td>
+  </tr>
+  <tr>
+    <td><strong>KDE Plasma</strong></td>
+    <td>Dolphin</td>
+    <td>Top-level <strong>Open with Grok</strong> (service menu)</td>
+  </tr>
+  <tr>
+    <td><strong>Cinnamon</strong></td>
+    <td>Nemo</td>
+    <td>Top-level <strong>Open with Grok</strong> (Nemo action)</td>
+  </tr>
+  <tr>
+    <td><strong>COSMIC</strong></td>
+    <td>COSMIC Files</td>
+    <td>Custom context menus are <a href="https://github.com/pop-os/cosmic-files/issues/1445">not supported yet</a>. Use <strong>Open With → Grok</strong> if offered, or <code>flatpak run org.grokbuild.Launcher /path/to/project</code></td>
+  </tr>
+</table>
+
+**GNOME note:** top-level menu items need the host package `python3-nautilus` (Debian/Ubuntu) or `nautilus-python` (Fedora/Arch). Without it, install that package, re-run `--install-context-menu`, then `nautilus -q`.
+
+**Open With** is also registered for folders on any desktop that honors the shared desktop entry (`MimeType=inode/directory`): right-click folder → Open With → **Grok**.
+
+You may need to restart the file manager once after installing the integrations (`nautilus -q`, `nemo -q`, or re-open Dolphin).
 
 ## Notes & Customization
 
 - **First launch**: It will install Grok if missing. This requires internet and will show progress in the opened terminal.
 - **Authentication**: On first `grok` run it opens a browser window for xAI login (SuperGrok / Premium+ required for Grok Build).
-- **Project directory**: The launcher starts in your `$HOME`. `cd` into your project folder inside the terminal if `grok` expects to be run from a specific directory.
-- **Terminal preference**: The launcher tries common terminals in this order: gnome-terminal, konsole, xfce4-terminal, mate-terminal, lxterminal, alacritty, kitty, wezterm, foot, xterm. 
+- **Project directory**: App-menu launch starts in your `$HOME`. Prefer **Open with Grok** on a project folder, or pass a path on the command line (see above).
+- **Terminal preference**: The launcher tries common terminals in this order: gnome-terminal, konsole, xfce4-terminal, mate-terminal, lxterminal, alacritty, kitty, wezterm, foot, xterm.
   If your favorite terminal isn't launched, you can edit `grok-launcher.sh` and adjust the `TERMINALS` array + the `launch_in_terminal()` case.
 - **Uninstall**:
   ```bash
+  flatpak run org.grokbuild.Launcher --uninstall-context-menu   # optional cleanup
   flatpak uninstall org.grokbuild.Launcher
   flatpak uninstall --unused   # cleanup
   ```
@@ -51,10 +124,6 @@ flatpak run org.grokbuild.Launcher
 ## Why a Flatpak for this?
 
 Grok is a fantastic CLI tool, but many Linux users (especially less technical ones) appreciate having a polished desktop icon that "just works". This Flatpak does exactly that without packaging the Grok binary itself (it re-uses the official host installation for maximum compatibility and access to your files).
-
-## Future ideas
-
-Right-click folder → "Open with Grok" (context menu integration - it will just `cd` to the directory) is planned for later. Target desktop environments: GNOME, KDE Plasma, Cinnamon, and COSMIC.
 
 ## License / Disclaimer
 
