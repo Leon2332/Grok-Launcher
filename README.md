@@ -9,15 +9,15 @@
 
 # Grok Flatpak Launcher
 
-A simple Flatpak wrapper that provides a desktop icon and menu entry for **Grok** (xAI's powerful terminal coding agent / Grok Build).
+A simple Flatpak wrapper that provides a desktop icon and menu entry for Grok Build.
 
-When launched, it:
-- Opens your system's preferred terminal emulator
-- Looks for an existing Grok install
-- Runs the official installer if the binary is missing
-- Starts the interactive Grok TUI
+When you open the **Grok** app icon, it starts a host terminal with a small launcher menu:
 
-This makes Grok easily accessible to normal users who prefer clicking an icon over typing commands, while still using the native `grok` CLI on the host (so it has full access to your projects, git, etc.).
+1. **Launch Grok** — install Grok Build if needed, then start the TUI  
+2. **Diagnostics** — shows only the dependencies that apply to your DE and WM.
+3. **Source code** — opens this repository in your browser  
+
+Right-click **Open with Grok** on a folder skips the menu and opens Grok in that directory.
 
 ## Requirements (on your host system)
 - Flatpak installed (`flatpak --version`)
@@ -37,19 +37,17 @@ flatpak-builder --user --install --force-clean build-dir org.grokbuild.Launcher.
 # flatpak-builder --system --install --force-clean build-dir org.grokbuild.Launcher.yml
 ```
 
-After installation, you should see **Grok** in your application menu / launcher, with the official Grok icon.
+After installation, you should see **Grok** in your application menu / launcher.
 
 You can also run it from command line:
 ```bash
+# Open the launcher menu
 flatpak run org.grokbuild.Launcher
-
-# Start in a specific project directory
-flatpak run org.grokbuild.Launcher /path/to/project
 ```
 
 ## Open with Grok (file manager context menu)
 
-Right-click a **folder** and choose **Open with Grok** to launch Grok already `cd`'d into that directory.
+Right-click a **folder** and choose **Open with Grok** to launch Grok already `cd`'d into that directory (no launcher menu).
 
 <p align="center">
   <img src="docs/Screenshot%20From%202026-07-16%2022-03-16.png" alt="Right-click a folder and choose Open with Grok" width="720" />
@@ -65,13 +63,11 @@ Right-click a **folder** and choose **Open with Grok** to launch Grok already `c
 
 ### Install the context menu entries
 
-After installing the Flatpak:
+After installing the Flatpak (CLI; advanced):
 
 ```bash
 flatpak run org.grokbuild.Launcher --install-context-menu
 ```
-
-Or from the app menu: right-click the **Grok** launcher → **Install File Manager Integration** (on desktops that show desktop actions).
 
 Check / remove:
 
@@ -79,6 +75,8 @@ Check / remove:
 flatpak run org.grokbuild.Launcher --status-context-menu
 flatpak run org.grokbuild.Launcher --uninstall-context-menu
 ```
+
+Use **Diagnostics** in the launcher menu to see whether context-menu (and related) pieces are present for your desktop.
 
 ### Desktop environment support
 
@@ -110,7 +108,7 @@ flatpak run org.grokbuild.Launcher --uninstall-context-menu
   </tr>
 </table>
 
-**GNOME note:** top-level menu items need the host package `python3-nautilus` (Debian/Ubuntu) or `nautilus-python` (Fedora/Arch). Without it, install that package, re-run `--install-context-menu`, then `nautilus -q`.
+**GNOME note:** top-level menu items need the host package `python3-nautilus` (Debian/Ubuntu) or `nautilus-python` (Fedora/Arch).
 
 **Open With** is also registered for folders on any desktop that honors the shared desktop entry (`MimeType=inode/directory`): right-click folder → Open With → **Grok**.
 
@@ -118,9 +116,10 @@ You may need to restart the file manager once after installing the integrations 
 
 ## Notes & Customization
 
-- **First launch**: It will install Grok if missing. This requires internet and will show progress in the opened terminal.
-- **Authentication**: On first `grok` run it opens a browser window for xAI login (SuperGrok / Premium+ required for Grok Build).
-- **Project directory**: App-menu launch starts in your `$HOME`. Prefer **Open with Grok** on a project folder, or pass a path on the command line (see above).
+- **First launch**: Open the app icon → **Launch Grok**. If the CLI is missing, it installs Grok (needs internet) and shows progress in the terminal.
+- **Authentication**: On first `grok` run, it opens a browser window for xAI login (SuperGrok / Premium+ required for Grok Build).
+- **Project directory**: **Launch Grok** from the menu starts in `$HOME`. Prefer **Open with Grok** on a project folder, or pass a path on the command line (skips the menu).
+- **Diagnostics**: Only lists dependencies for your current desktop (e.g. GNOME shows Grok Build, context-menu, python3-nautilus; KDE/Cinnamon omit Nautilus-specific packages).
 - **Terminal preference**: The launcher tries common terminals in this order: gnome-terminal, konsole, xfce4-terminal, mate-terminal, lxterminal, alacritty, kitty, wezterm, foot, xterm.
   If your favorite terminal isn't launched, you can edit `grok-launcher.sh` and adjust the `TERMINALS` array + the `launch_in_terminal()` case.
 - **Uninstall**:
