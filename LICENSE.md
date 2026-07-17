@@ -19,18 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-## Notes
-
-This license covers the original source code and documentation in this
-repository (for example the launcher script, Flatpak manifest, and desktop
-entry).
-
-"Grok", "Grok Build", and "xAI" are trademarks of xAI. This project is an
-unofficial community launcher and is not affiliated with, endorsed by, or
-sponsored by xAI. The Grok CLI is installed from xAI and remains under
-xAI's own terms.
-
-If any branding assets (such as icons) are included and are not original
-works of the copyright holder above, those assets are not licensed under
-MIT unless explicitly stated otherwise.
