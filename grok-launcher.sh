@@ -98,28 +98,12 @@ create_host_launch_script() {
 # Grok's official installer puts the binary in ~/.grok/bin.
 export PATH="${HOME}/.grok/bin:${HOME}/.local/bin:${HOME}/bin:${PATH:-/usr/bin:/bin}"
 
-# Same 8-frame braille spinner Grok uses ({spinner:.cyan} in the CLI).
+# Show braille spinner (same frames Grok uses) while installing.
 SPINNER_FRAMES=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧)
 SPINNER_INTERVAL=0.08
 
-spin_countdown() {
-    local seconds="${1:-3}"
-    local message="${2:-Starting}"
-    local i frame n=${#SPINNER_FRAMES[@]}
-    local end=$((SECONDS + seconds))
-    local fi=0
-    while (( SECONDS < end )); do
-        frame="${SPINNER_FRAMES[$((fi % n))]}"
-        i=$((end - SECONDS))
-        ((i < 1)) && i=1
-        printf "\r\033[0;36m%s\033[0m %s in %d second(s)... " "$frame" "$message" "$i"
-        sleep "$SPINNER_INTERVAL"
-        fi=$((fi + 1))
-    done
-    printf "\r\033[K"
-}
 
-# Same spinner while a background PID is still running (for long installs).
+# Spinner while a background PID is still running (install progress).
 spin_while_pid() {
     local pid="$1"
     local message="${2:-Working}"
@@ -192,9 +176,6 @@ if ! GROK_BIN=$(resolve_grok); then
 
     printf "\033[1;32mGrok Build installed successfully.\033[0m\n"
     printf "\033[0;90mUsing: %s\033[0m\n\n" "$GROK_BIN"
-    spin_countdown 3 "Starting Grok"
-else
-    spin_countdown 2 "Starting Grok"
 fi
 
 printf "\033[1;34mStarting Grok Build...\033[0m\n"
