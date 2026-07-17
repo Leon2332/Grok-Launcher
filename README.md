@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://vimeo.com/1210626534?share=copy&fl=sv&fe=ci" target="_blank" rel="noopener noreferrer">
-    <img src="docs/video_thumbnail.jpeg" alt="Watch the demo on Vimeo" width="720" />
+    <img src="docs/Vimeo_thumbnail.png" alt="Watch the demo on Vimeo" width="720" />
   </a>
   <br />
   <em>Click the thumbnail to watch the demo on Vimeo</em>
