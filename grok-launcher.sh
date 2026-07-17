@@ -6,7 +6,7 @@
 set -euo pipefail
 
 INTEGRATIONS_DIR="/app/share/grok-launcher/integrations"
-VERSION="0.9.3"
+VERSION="0.9.3.1"
 SOURCE_URL="https://github.com/Leon2332/Grok-Launcher"
 
 usage() {
@@ -123,9 +123,11 @@ C_BLUE=$'\033[1;34m'
 
 SPINNER_FRAMES=(⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧)
 SPINNER_INTERVAL=0.08
-# Orange square as a foreground glyph (not full-cell background — avoids solid bars
-# when rows stack). Prefer small square (U+25AA, width 1) over ■ (ambiguous width).
+# Small square glyph (U+25AA, width 1) — not full-cell background, avoids solid bars
+# when rows stack. Prefer over ■ (ambiguous width).
 SQUARE="${C_ORANGE}▪${C_RESET}"
+# Unfocused menu mark (same glyph, grey)
+SQUARE_DIM="${C_GREY}▪${C_RESET}"
 # Logo bounding box: "▪ ▪" = 1+1+1
 LOGO_W=3
 # Menu selection: "▪ " + label
@@ -137,14 +139,25 @@ MENU_MARK_W=2
 DIAG_WIDTH=48
 
 # ---------------------------------------------------------------------------
+# Alternate screen buffer (like vim/htop): menu redraws never fill scrollback.
+enter_alt_screen() {
+    printf '\033[?1049h'
+}
+
+leave_alt_screen() {
+    printf '\033[?1049l'
+}
+
 cleanup_ui() {
+    leave_alt_screen
     tput cnorm 2>/dev/null || true
     stty sane 2>/dev/null || true
 }
 trap cleanup_ui EXIT INT TERM
 
 clear_screen() {
-    printf '\033[2J\033[H'
+    # 2J = clear viewport, 3J = erase scrollback (xterm/VTE), H = home cursor
+    printf '\033[2J\033[3J\033[H'
 }
 
 hide_cursor() {
@@ -286,14 +299,22 @@ draw_menu_items() {
     pad=$(center_pad "$block_w")
     for item in "$@"; do
         if [ "$i" -eq "$selected" ]; then
-            printf '%s%s %s%s%s\n' "$pad" "$SQUARE" "$C_WHITE" "$item" "$C_RESET"
+            printf '%s%s %s%s%s\n' "$pad" "$SQUARE" "$C_ORANGE" "$item" "$C_RESET"
         else
-            # MENU_MARK_W spaces so unselected text lines up under the label
-            printf '%s%*s%s%s%s\n' "$pad" "$MENU_MARK_W" '' "$C_WHITE" "$item" "$C_RESET"
+            printf '%s%s %s%s%s\n' "$pad" "$SQUARE_DIM" "$C_WHITE" "$item" "$C_RESET"
         fi
         i=$((i + 1))
     done
     printf '\n'
+}
+
+# Bottom-left key legend (absolute position; does not affect vertical centering)
+draw_key_hints() {
+    local rows
+    rows=$(term_rows)
+    # Row $rows, column 2 — small left inset
+    printf '\033[%d;2H%s↑ ↓ navigate · Enter select · Esc quit%s' \
+        "$rows" "$C_GREY" "$C_RESET"
 }
 
 # Vertical centering for the home screen
@@ -620,13 +641,14 @@ draw_diagnostics_frame() {
     i=0
     for item in "${actions[@]}"; do
         if [ "$i" -eq "$selected" ]; then
-            printf '%s%s %s%s%s\n' "$DIAG_PAD" "$SQUARE" "$C_WHITE" "$item" "$C_RESET"
+            printf '%s%s %s%s%s\n' "$DIAG_PAD" "$SQUARE" "$C_ORANGE" "$item" "$C_RESET"
         else
-            printf '%s%*s%s%s%s\n' "$DIAG_PAD" "$MENU_MARK_W" '' "$C_WHITE" "$item" "$C_RESET"
+            printf '%s%s %s%s%s\n' "$DIAG_PAD" "$SQUARE_DIM" "$C_WHITE" "$item" "$C_RESET"
         fi
         i=$((i + 1))
     done
     printf '\n'
+    draw_key_hints
 }
 
 show_diagnostics() {
@@ -814,6 +836,7 @@ run_menu() {
     local sel=0
     local key
 
+    enter_alt_screen
     while true; do
         clear_screen
         hide_cursor
@@ -821,6 +844,7 @@ run_menu() {
         draw_logo
         draw_title
         draw_menu_items "$sel" "${items[@]}"
+        draw_key_hints
 
         stty -echo -icanon min 1 time 0 2>/dev/null || stty -echo 2>/dev/null || true
         key=$(read_key) || key=quit
