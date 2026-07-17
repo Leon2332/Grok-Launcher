@@ -40,13 +40,13 @@ flatpak-builder --user --install --force-clean build-dir org.grokbuild.Launcher.
 After installation, you should see **Grok** in your application menu / launcher.
 
 <p align="center">
-  <img src="docs/Screenshot%20From%202026-07-17%2022-00-18.png" alt="Right-click a folder and choose Open with Grok" width="720" />
+  <img src="docs/Screenshot%20From%202026-07-17%2023-24-08.png" alt="Right-click a folder and choose Open with Grok" width="720" />
   <br />
   <em>Grok Launcher menu → select 'Diagnostics'</em>
 </p>
 
 <p align="center">
-  <img src="docs/Screenshot%20From%202026-07-17%2021-55-58.png" alt="Right-click a folder and choose Open with Grok" width="720" />
+  <img src="docs/Screenshot%20From%202026-07-17%2023-27-04.png" alt="Right-click a folder and choose Open with Grok" width="720" />
   <br />
   <em>Diagnostics menu → select 'Ask Grok to fix this'</em>
 </p>
